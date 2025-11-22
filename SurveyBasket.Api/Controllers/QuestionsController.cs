@@ -17,7 +17,7 @@ public class QuestionsController(IQuestionService questionService) : ControllerB
         var result = await _questionService.GetAllAsync(pollId, cancellationToken);
         return result.IsSuccess
             ? Ok(result.Value) 
-            : result.ToProblem(StatusCodes.Status404NotFound);
+            : result.ToProblem();
     }
     
 
@@ -30,7 +30,7 @@ public class QuestionsController(IQuestionService questionService) : ControllerB
         var result = await _questionService.GetAsync(pollId, id, cancellationToken);
         return result.IsSuccess
             ? Ok(result.Value)
-            : result.ToProblem(StatusCodes.Status404NotFound);
+            : result.ToProblem();
     }
 
 
@@ -43,9 +43,7 @@ public class QuestionsController(IQuestionService questionService) : ControllerB
         if (result.IsSuccess)
             return CreatedAtAction(nameof(Get), new { pollId, result.Value.Id }, result.Value);
 
-        return result.Error.Equals(QuestionErrors.DuplicatedQuestionTitle)
-                ? result.ToProblem(StatusCodes.Status409Conflict)
-                : result.ToProblem(StatusCodes.Status404NotFound);
+        return result.ToProblem();
          
 
     }
@@ -56,12 +54,7 @@ public class QuestionsController(IQuestionService questionService) : ControllerB
     {
         var result = await _questionService.UpdateAsync(pollId, id,request, cancellationToken);
 
-        if (result.IsSuccess)
-            return NoContent();
-
-        return result.Error.Equals(QuestionErrors.DuplicatedQuestionTitle)
-                ? result.ToProblem(StatusCodes.Status409Conflict)
-                : result.ToProblem(StatusCodes.Status404NotFound);
+        return result.IsSuccess ? NoContent() : result.ToProblem();
 
 
     }
@@ -71,6 +64,6 @@ public class QuestionsController(IQuestionService questionService) : ControllerB
     public async Task<IActionResult> ToggleStatus([FromRoute] int pollId ,[FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _questionService.ToggleStatusAsync(pollId, id, cancellationToken);
-        return result.IsSuccess ? NoContent() : result.ToProblem(StatusCodes.Status404NotFound);
+        return result.IsSuccess ? NoContent() : result.ToProblem();
     }
 }

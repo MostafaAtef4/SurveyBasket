@@ -18,12 +18,6 @@ public class QuestionService(ApplicationDbContext context) : IQuestionService
         var question = await _context.Questions
             .Where(x => x.PollId == pollId)
             .Include(x => x.Answers)
-            //.Select(q=> new QuestionResponse(
-            //    q.Id,
-            //    q.Content,
-            //    q.Answers.Select(a=>new AnswerResponse(a.Id,a.Content))
-
-            //    ))
             .ProjectToType<QuestionResponse>()
             .AsNoTracking()
             .ToListAsync(cancellationToken);
@@ -127,7 +121,7 @@ public class QuestionService(ApplicationDbContext context) : IQuestionService
         question.Answers.ToList().ForEach(answer =>
         {
 
-            answer.IsActive = request.Answers.Contains(answer.Content);
+            answer.IsActive = request.Answers.Contains(answer.Content); 
         });
 
         await _context.SaveChangesAsync();

@@ -44,7 +44,7 @@ public class PollsController(IPollService pollService) : ControllerBase
         var result = await _pollService.AddAsync(request, cancellationToken);
         return result.IsSuccess
             ? CreatedAtAction(nameof(Get), new { id = result.Value.Id }, result.Value)
-            : result.ToProblem(statusCode: StatusCodes.Status409Conflict);
+            : result.ToProblem();
 
     }
 
@@ -57,8 +57,8 @@ public class PollsController(IPollService pollService) : ControllerBase
             return NoContent();
 
         return result.Error.Equals(PollErrors.DuplicatedPollTitle)
-                ? result.ToProblem(StatusCodes.Status409Conflict)
-                : result.ToProblem(StatusCodes.Status404NotFound);
+                ? result.ToProblem()
+                : result.ToProblem();
 
     }
 
@@ -66,14 +66,14 @@ public class PollsController(IPollService pollService) : ControllerBase
     public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _pollService.DeleteAsync(id, cancellationToken);
-        return result.IsSuccess ? NoContent() : result.ToProblem( StatusCodes.Status404NotFound);
+        return result.IsSuccess ? NoContent() : result.ToProblem( );
 
     }
     [HttpPut("{id}/togglePublish")]
     public async Task<IActionResult> TogglePublishStatus([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _pollService.TogglePublishStatusAsync(id, cancellationToken);
-        return result.IsSuccess ? NoContent() : result.ToProblem(StatusCodes.Status404NotFound);
+        return result.IsSuccess ? NoContent() : result.ToProblem();
     }
 
 

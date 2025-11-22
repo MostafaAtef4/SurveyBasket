@@ -16,7 +16,7 @@ public class AuthController(IAuthService authService, IOptions<JwtOptions> jwtOp
         var authResult = await _authService.GetTokenAsync(request.Email, request.Password, cancellationToken);
         return authResult.IsSuccess
             ? Ok(authResult.Value)
-            :authResult.ToProblem(StatusCodes.Status400BadRequest);
+            :authResult.ToProblem();
 
     }
 
@@ -25,7 +25,7 @@ public class AuthController(IAuthService authService, IOptions<JwtOptions> jwtOp
     {
         var authResult = await _authService.GetRefreshTokenAsync(request.Token, request.RefreshToken, cancellationToken);
         return authResult.IsSuccess ? Ok(authResult.Value)
-            : authResult.ToProblem(StatusCodes.Status404NotFound);
+            : authResult.ToProblem();
 
     }
 
@@ -34,7 +34,7 @@ public class AuthController(IAuthService authService, IOptions<JwtOptions> jwtOp
     public async Task<IActionResult> RevokRefreshAsync([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)
     {
         var result = await _authService.RevokRefreshTokenAsync(request.Token, request.RefreshToken, cancellationToken);
-        return result.IsSuccess ? Ok() : result.ToProblem(StatusCodes.Status404NotFound);
+        return result.IsSuccess ? Ok() : result.ToProblem();
 
     }
 

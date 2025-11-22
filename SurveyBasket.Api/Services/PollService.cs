@@ -1,15 +1,4 @@
-﻿
-
-
-using Azure;
-using Azure.Core;
-using Mapster;
-using Microsoft.VisualBasic;
-using SurveyBasket.Api.Abstractions;
-using SurveyBasket.Api.Entities;
-using SurveyBasket.Api.Errors;
-using SurveyBasket.Api.Persistence;
-using System.Threading.Tasks;
+﻿using SurveyBasket.Api.Persistence;
 
 namespace SurveyBasket.Api.Services;
 
